@@ -1,280 +1,71 @@
-import pygame
-import time
-pygame.init()
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <title>بازی های دیگر</title>
+  <style>
+    body {
+      direction: rtl;
+      margin: 0;
+      padding: 0;
+      font-family: 'Tahoma', sans-serif;
+      background: linear-gradient(to bottom right, #c0e0ff, #f9faff);
+      min-height: 100vh;
+    }
 
-screen=pygame.display.set_mode((600,600))
-screen.fill((255,255,255))
-icon=pygame.image.load('icon.jpg')
-pygame.display.set_icon(icon)
-pygame.display.set_caption("XO")
+    .container {
+      max-width: 900px;
+      margin: 50px auto;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      padding: 40px 50px;
+    }
 
-xlist=[60,220,400]
-ylist=[75,235,415]
-Xxlist=[]
-Xylist=[]
-Oxlist=[]
-Oylist=[]
-XOlist=9*['empty']
-img=pygame.image.load('1.png')
-oimg=pygame.image.load('o.png')
-ximg=pygame.image.load('x.png')
-win=pygame.mixer.Sound('win.mp3')
-turnsound=pygame.mixer.Sound('turn.mp3')
-bord1=pygame.image.load('bord1.png')
-bord2=pygame.image.load('bord2.png')
-bord3=pygame.image.load('bord3.png')
-bord4=pygame.image.load('bord4.png')
-turn=0
-chek=False
-XOchek=None
-run=True
-game=True
-while run:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            run=False
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            x,y=pygame.mouse.get_pos()
-            if 50<x<550 and 50<y<550 and XOlist[((y-50)//166)*3+((x-50)//166)]=='empty' and game:
-                if turn%2==1:
-                    Oxlist.append(xlist[(x-50)//166])
-                    Oylist.append(ylist[(y-50)//166])
-                    XOlist[((y-50)//166)*3+((x-50)//166)]='O'
-                else:
-                    Xxlist.append(xlist[(x-50)//166])
-                    Xylist.append(ylist[(y-50)//166])
-                    XOlist[((y-50)//166)*3+((x-50)//166)]='X'
-                turnsound.play()
-                turn+=1
-                chek=True
-                XOchek=((y-50)//166)*3+((x-50)//166)
-    screen.fill((255,255,255))
-    screen.blit(img,(50,50))
-    font=pygame.font.Font('vazirmatn-Bold.ttf',40)
+    p{
+      font-size: 17px;
+      line-height: 2.1;
+      color: #001ab0;
+      text-align: justify;
+      margin-right: 10%;
     
-    if turn%2==0:
-        text=font.render('X turn',True,(255,0,0))
-        screen.blit(text,(100,550))
-    else:
-        text=font.render('O turn',True,(0,0,255))
-        screen.blit(text,(100,550))
-    
-    for i in range(len(Xxlist)):
-        screen.blit(ximg,(Xxlist[i],Xylist[i]))
-    for i in range(len(Oxlist)):
-        screen.blit(oimg,(Oxlist[i],Oylist[i]))
-    if game:
-        pygame.display.update()
-    if chek:
-        if XOlist[XOchek]=='O':
-            
-            if Oxlist[-1]==xlist[0]:
-                if XOlist[XOchek+1]=='O' and XOlist[XOchek+2]=='O':
-                    text=font.render('O win',True,(0,0,255))
-                    screen.blit(text,(100,10))
-                    screen.blit(bord1,(xlist[0]-10,Oylist[-1]-25))
-                    win.play()
-                    game=False
-                    pygame.display.update()
-                elif Oylist[-1]==ylist[0]:
-                    if XOlist[4]=='O' and XOlist[8]=='O':
-                        text=font.render('O win',True,(0,0,255))
-                        screen.blit(text,(100,10))
-                        screen.blit(bord4,(50,50))
-                        win.play()
-                        game=False
-                        pygame.display.update()
-                elif Oylist[-1]==ylist[2]:
-                    if XOlist[4]=='O' and XOlist[2]=='O':
-                        text=font.render('O win',True,(0,0,255))
-                        screen.blit(text,(100,10))
-                        screen.blit(bord3,(50,50))
-                        win.play()
-                        game=False
-                        pygame.display.update()
-            elif Oxlist[-1]==xlist[1]:
-                if XOlist[XOchek+1]=='O' and XOlist[XOchek-1]=='O':
-                    text=font.render('O win',True,(0,0,255))
-                    screen.blit(text,(100,10))
-                    screen.blit(bord1,(xlist[0]-10,Oylist[-1]-25))
-                    win.play()
-                    game=False
-                    pygame.display.update()
-                elif Oylist[-1]==ylist[1]:
-                    if XOlist[0]=='O' and XOlist[8]=='O':
-                        text=font.render('O win',True,(0,0,255))
-                        screen.blit(text,(100,10))
-                        screen.blit(bord4,(50,50))
-                        win.play()
-                        game=False
-                        pygame.display.update()
-                    elif XOlist[2]=='O' and XOlist[6]=='O':
-                        text=font.render('O win',True,(0,0,255))
-                        screen.blit(text,(100,10))
-                        screen.blit(bord3,(50,50))
-                        win.play()
-                        game=False
-                        pygame.display.update()
-            elif Oxlist[-1]==xlist[2]:
-                if XOlist[XOchek-1]=='O' and XOlist[XOchek-2]=='O':
-                    text=font.render('O win',True,(0,0,255))
-                    screen.blit(text,(100,10))
-                    screen.blit(bord1,(xlist[0]-10,Oylist[-1]-25))
-                    win.play()
-                    game=False
-                    pygame.display.update()
-                elif Oylist[-1]==ylist[0]:
-                    if XOlist[4]=='O' and XOlist[6]=='O':
-                        text=font.render('O win',True,(0,0,255))
-                        screen.blit(text,(100,10))
-                        screen.blit(bord3,(50,50))
-                        win.play()
-                        game=False
-                        pygame.display.update()
-                elif Oylist[-1]==ylist[2]:
-                    if XOlist[4]=='O' and XOlist[0]=='O':
-                        text=font.render('O win',True,(0,0,255))
-                        screen.blit(text,(100,10))
-                        screen.blit(bord4,(50,50))
-                        win.play()
-                        game=False
-                        pygame.display.update()
-            
-            if Oylist[-1]==ylist[0]:
-                if XOlist[XOchek+3]=='O' and XOlist[XOchek+6]=='O':
-                    text=font.render('O win',True,(0,0,255))
-                    screen.blit(text,(100,10))
-                    screen.blit(bord2,(Oxlist[-1]-10,ylist[0]-25))
-                    win.play()
-                    game=False
-                    pygame.display.update()
-            elif Oylist[-1]==ylist[1]:
-                if XOlist[XOchek-3]=='O' and XOlist[XOchek+3]=='O':
-                    text=font.render('O win',True,(0,0,255))
-                    screen.blit(text,(100,10))
-                    screen.blit(bord2,(Oxlist[-1]-10,ylist[0]-25))
-                    win.play()
-                    game=False
-                    pygame.display.update()
-            elif Oylist[-1]==ylist[2]:
-                if XOlist[XOchek-3]=='O' and XOlist[XOchek-6]=='O':
-                    text=font.render('O win',True,(0,0,255))
-                    screen.blit(text,(100,10))
-                    screen.blit(bord2,(Oxlist[-1]-10,ylist[0]-25))
-                    win.play()
-                    game=False
-                    pygame.display.update()
+    }
+    .img1 {
+      max-width: 100%;
+      margin-top: 30px;
+      margin-right: 10%;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+      
+    }
+    .img2{
+      max-width: 100%;
+      margin-top: 30px;
+      margin-right: 30%;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    }
 
+  </style>
+</head>
 
-
-        elif XOlist[XOchek]=='X':
-
-            if Xxlist[-1]==xlist[0]:
-                if XOlist[XOchek+1]=='X' and XOlist[XOchek+2]=='X':
-                    text=font.render('X win',True,(255,0,0))
-                    screen.blit(text,(100,10))
-                    screen.blit(bord1,(xlist[0]-10,Xylist[-1]-25))
-                    win.play()
-                    game=False
-                    pygame.display.update()
-                elif Xylist[-1]==ylist[0]:
-                    if XOlist[4]=='X' and XOlist[8]=='X':
-                        text=font.render('X win',True,(255,0,0))
-                        screen.blit(text,(100,10))
-                        screen.blit(bord4,(50,50))
-                        win.play()
-                        game=False
-                        pygame.display.update()
-                elif Xylist[-1]==ylist[2]:
-                    if XOlist[4]=='X' and XOlist[2]=='X':
-                        text=font.render('X win',True,(255,0,0))
-                        screen.blit(text,(100,10))
-                        screen.blit(bord3,(50,50))
-                        win.play()
-                        game=False
-                        pygame.display.update()
-            elif Xxlist[-1]==xlist[1]:
-                if XOlist[XOchek+1]=='X' and XOlist[XOchek-1]=='X':
-                    text=font.render('X win',True,(255,0,0))
-                    screen.blit(text,(100,10))
-                    screen.blit(bord1,(xlist[0]-10,Xylist[-1]-25))
-                    win.play()
-                    game=False
-                    pygame.display.update()
-                elif Xylist[-1]==ylist[1]:
-                    if XOlist[0]=='X' and XOlist[8]=='X':
-                        text=font.render('X win',True,(255,0,0))
-                        screen.blit(text,(100,10))
-                        screen.blit(bord4,(50,50))
-                        win.play()
-                        game=False
-                        pygame.display.update()
-                    elif XOlist[2]=='X' and XOlist[6]=='X':
-                        text=font.render('X win',True,(255,0,0))
-                        screen.blit(text,(100,10))
-                        screen.blit(bord3,(50,50))
-                        win.play()
-                        game=False
-                        pygame.display.update()
-            elif Xxlist[-1]==xlist[2]:
-                if XOlist[XOchek-1]=='X' and XOlist[XOchek-2]=='X':
-                    text=font.render('X win',True,(255,0,0))
-                    screen.blit(text,(100,10))
-                    screen.blit(bord1,(xlist[0]-10,Xylist[-1]-25))
-                    win.play()
-                    game=False
-                    pygame.display.update()
-                elif Xylist[-1]==ylist[0]:
-                    if XOlist[4]=='X' and XOlist[6]=='X':
-                        text=font.render('X win',True,(255,0,0))
-                        screen.blit(text,(100,10))
-                        screen.blit(bord3,(50,50))
-                        win.play()
-                        game=False
-                        pygame.display.update()
-                elif Xylist[-1]==ylist[2]:
-                    if XOlist[4]=='X' and XOlist[0]=='X':
-                        text=font.render('X win',True,(255,0,0))
-                        screen.blit(text,(100,10))
-                        screen.blit(bord4,(50,50))
-                        win.play()
-                        game=False
-                        pygame.display.update()
-            
-            if Xylist[-1]==ylist[0]:
-                if XOlist[XOchek+3]=='X' and XOlist[XOchek+6]=='X':
-                    text=font.render('X win',True,(255,0,0))
-                    screen.blit(text,(100,10))
-                    screen.blit(bord2,(Xxlist[-1]-10,ylist[0]-25))
-                    win.play()
-                    game=False
-                    pygame.display.update()
-            elif Xylist[-1]==ylist[1]:
-                if XOlist[XOchek-3]=='X' and XOlist[XOchek+3]=='X':
-                    text=font.render('X win',True,(255,0,0))
-                    screen.blit(text,(100,10))
-                    screen.blit(bord2,(Xxlist[-1]-10,ylist[0]-25))
-                    win.play()
-                    game=False
-                    pygame.display.update()
-            elif Xylist[-1]==ylist[2]:
-                if XOlist[XOchek-3]=='X' and XOlist[XOchek-6]=='X':
-                    text=font.render('X win',True,(255,0,0))
-                    screen.blit(text,(100,10))
-                    screen.blit(bord2,(Xxlist[-1]-10,ylist[0]-25))
-                    win.play()
-                    game=False
-                    pygame.display.update()
-        if 'empty' not in XOlist and game:
-            XOlist=9*['empty']
-            Xxlist.clear()
-            Xylist.clear()
-            Oxlist.clear()
-            Oylist.clear()
-            text=font.render('DRAW',True,(135,135,135))
-            screen.blit(text,(100,10))
-            pygame.display.update()
-            time.sleep(1)
-        chek=False
-    
-   
+<body>
+    <div class="container">
+        <h1>بازی های دیگر من:</h1>
+    </div>
+    <div class="container">
+      <a href="snakesAndLadders.rar" download><img src="snakes&ladders.png" alt="" width="200px" height="200px" class="img1"></a>
+      <a href="dinoRun.rar" download><img src="dino.png" alt="" width="200px" height="200px" class="img2"></a>
+      <br>
+      <a href="XO.rar" download><img src="xo.png" alt="" width="200px" height="200px" class="img1"></a>
+      <a href="memory.rar" download><img src="memory.png" alt="" width="200px" height="200px" class="img2"></a>
+      <br>
+      
+      <a href="8thGoal.rar" download><img src="8thGoal.png" alt="" width="200px" height="200px" class="img1"></a>
+      <img src="pvz.png" alt="" width="200px" height="200px" class="img2">
+      <br>
+      <br>
+      <p >برای دانلود بازی ها بر روی عکس آن کلیک کنید.</p>
+    </div>
+</body>
+</html>
